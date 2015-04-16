@@ -8,15 +8,7 @@ This project contains utility functions for working with the [ACS NSQIP dataset]
 
 This package depends on the plyr package.
 ```r
-install.packages(c("plyr", "devtools"))
-```
-
-Then install nsqiputils using the `install_github` function in the
-[devtools](https://github.com/hadley/devtools) package.
-
-```r
-library(devtools)
-install_github("emilyborsting/nsqiputils")
+install.packages("plyr", repos="http://cran.r-project.org")
 ```
 
 ## Preparing the data
