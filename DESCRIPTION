@@ -1,0 +1,13 @@
+Package: nsqiputils
+Version: 0.1
+Date: 2015-04-15
+Title: Helper functions to work with ACS NSQIP data
+Author: Emily A Borsting <eborsting@miami.edu>
+Maintainer: Emily A Borsting <eborsting@miami.edu>
+Description: ACS NSQIP
+Depends:
+    R (>= 2.15)
+Imports:
+    plyr
+License: ISC + file LICENSE
+URL: http://github.com/emilyborsting/nsqiputils
