@@ -2,7 +2,7 @@
 
 This project contains utility functions for working with the [ACS NSQIP dataset](http://site.acsnsqip.org/about/) using [R](http://www.r-project.org/).
 
-> ***N.B.*** American College of Surgeons National Surgical Quality Improvement Program (ACS NSQIP®) data is not included in this repository and must be acquired indepedently.
+> ***N.B.*** American College of Surgeons National Surgical Quality Improvement Program (ACS NSQIP®) data is not included in this repository and must be acquired independently.
 
 ## Installation
 
@@ -14,10 +14,10 @@ install.packages("RSQLite", repos="http://cran.r-project.org")
 
 ## Data
 
-By default, NSQIP gives you a set of yearly, self-extracting TXT, SPSS or SAS files. While it's possible to work with the data in any format, the upfront effort to put it in a database is worth the time investment. The following  assmes familiarity with `unix-like` operating systems and standard `gnu-utils`.
+ACS NSQIP® provides a set of yearly, self-extracting `TXT`, `SPSS` or `SAS` files. While it's possible to work with the data in any format, the upfront effort to put it in a database is worth the time investment. The following assumes familiarity with `unix-like` operating systems and standard `gnu-utils`.
 
 ### Step 1 : Merge (tab delimited text)
-The extracted TXT PUF files are tab delimited and seperated by year. To do cross-year analysis we need to merge the dataset. To properly merge, ensure that each PUF's column headers are of the same case. You can make the headers all uppercase with `vim` by typing `ggvU` then saving `:wq`.
+The extracted TXT PUF files are tab delimited and separated by year. To do cross-year analysis we need to merge the dataset. To successfully merge, ensure that each PUF's column headers are of the same case. You can make the headers all uppercase with `vim` by typing `ggvU` then saving `:wq`.
 
 From there, attempt the merge.
 ```r
