@@ -51,7 +51,7 @@ The database file is ~3.8 GB. Querying is extremely fast; filtering by CPT code 
 
 ## Usage
 
-See `nsqip.R` for usage.
+See [nsqip.R](https://github.com/emilyborsting/nsqiputils/blob/master/nsqip.R) for usage.
 
 ## Author
 Emily A. Borsting
