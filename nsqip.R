@@ -22,6 +22,7 @@ NSQIPFromDir <- function (cpt,datadir="./data") {
   return(data)
 }
 
-# usage
-full.data <- NSQIPFromDir()
+# usage ---------------
+#full.data <- NSQIPFromDir()
 #filtered.by.cpt.data<- NSQIPFromDir(cpt=420029)
+#write.csv(full.data, row.names=FALSE, na="", "data/nsqip.csv")
