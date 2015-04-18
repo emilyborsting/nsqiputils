@@ -16,31 +16,36 @@ install.packages("plyr", repos="http://cran.r-project.org")
 By default, NSQIP gives you a set of yearly, self-extracting TXT, SPSS or SAS files. While it's possible to work with the data in any format, the upfront effort to put it in a database is well woth the time investment. The following steps assume you are familiar with `unix-like` operating systems and standard `gnu-utils`.
 
 ### Step 1 : Merge (tab delimited text)
-Once extracted, the TXT PUF files are tab delimited and seperated by year. To do cross-year analysis we need to merge the dataset. For the merge to properly join on all fields, ensure that each PUF's file headers are either all uppercase or lowercase. You can do that by opening each file with `vim` and typing `ggvU` saving with `esc` then `:wq.`
+The extracted TXT PUF files are tab delimited and seperated by year. To do cross-year analysis we need to merge the dataset. To properly merge, ensure that each PUF's column headers are of the same case. You can make the headers all uppercase with `vim` by typing `ggvU` then saving `:wq`.
 
-    NSQIPFromDir() # see nsqip.R for usage
-
-Merging all datasets can take over an hour. Merging by CPT code takes closer to ten minutes. While workable, unless you know exactly what CPT code you want to work with there are faster ways to query and filter data.
+From there, attempt the merge.
+```r
+NSQIPFromDir() # Merge all TXT data, unfiltered
+NSQIPFromDir(cpt=33880) # Merge all TXT data, filtered by CPT code
+```
+Merging all datasets can take over an hour. Merging by filtered CPT code takes closer to 10 minutes. Fortunately, there are faster ways to query and filter data.
 
 ### Step 2 : Clean (csv)
 Save the previously merged data as a CSV file. It's helpful to remove `"NULL"` and `-99` as NULL values in CSV are simply represented as empty. Here's how you can do that with the gnu tool `sed`.
-
-    sed -e 's/\"NULL\"//g' -e 's/\"NULL\"//g' nsqip.csv
-
+```sh
+sed -e 's/\"NULL\"//g' -e 's/\"NULL\"//g' nsqip.csv
+```
 The merged, cleaned, and compressed CSV is ~500MB. Filtering is still slow.
 
-### Query (sql)
-For faster querying, use a database.
+### Step 3 : Query (sql)
+For faster querying, use a database. A `schema.sql` is provided that includes indexes on commonly queried fields like CPT. 
 
-    cat schema.sql | sqlite3 data/nsqip.db # create the database
-    sqlite3 data/nsqip.db # open the database via the command line
-
-Import the merged CSV file.
-
-    sqlite> .mode csv NSQIP
-    sqlite> .import data/nsqip.nulls.99.csv NSQIP
-
-The database file is ~3.8 GB. Filtering and querying is extremely fast and makes iteration easy. Filtering by CPT code has gone from 10 minutes to less than a tenth of a second.
+Created the database with the included schema.
+```sh
+cat schema.sql | sqlite3 data/nsqip.db
+```
+Open the database, then import the cleaned and merged CSV file.
+```sh
+sqlite3 data/nsqip.db 
+sqlite> .mode csv NSQIP
+sqlite> .import data/nsqip.nulls.99.csv NSQIP
+```
+The database file is ~3.8 GB. Querying is extremely fast; filtering by CPT code has gone from 10 minutes to less than a tenth of a second.
 
 ## Usage
 
