@@ -16,3 +16,8 @@ data
 vignettes/*.html
 vignettes/*.pdf
 .Rproj.user
+
+# prevent any actual data from accidentally being uploaded
+*.xlsx
+*.csv
+*.db

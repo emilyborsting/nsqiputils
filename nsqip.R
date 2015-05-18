@@ -4,7 +4,6 @@
 
 library("plyr")
 library("RSQLite")
-library("DBI")
 
 
 NSQIPFromDir <- function (cpt,datadir="./data") {
@@ -48,20 +47,50 @@ ByCPT <- function (cpt,con) {
   #
   # Returns:
   #   A filtered nsqip data frame by cpt.
+  
   res <- dbSendQuery(con, sprintf("SELECT * FROM NSQIP WHERE CPT = %s",cpt))
-  data <- dbFetch(res)
+  data <- dbFetch(res,n=-1)
   dbClearResult(res)
   return(data)
 }
-# usage
+
+ByMultipleCPT <- function (cpts,con) {
+  # Args:
+  #   cpts: A collection of CPT codes to filter on.
+  #   con: Database connection
+  #
+  # Returns:
+  #   A filtered nsqip data frame by a collection of cpt codes.
+  qry <- sprintf("SELECT * FROM NSQIP WHERE ")
+  i<-0
+  for (cpt in cpts){
+    if(i==0){
+      qry <- sprintf("%s CPT = %s",qry, cpt)
+    }else{
+      qry <- sprintf("%s OR CPT = %s",qry, cpt)
+    }
+    i<-i+1
+  }
+  res <- dbSendQuery(con, qry)
+  data <- dbFetch(res,n=-1)
+  dbClearResult(res)
+  return(data)
+}
+# Usage
+
 # TXT -------------------------------------
 #full.data.txt <- NSQIPFromDir()
-#cpt.data.txt <- NSQIPFromDir(cpt=420029)
+#cpt.data.txt <- NSQIPFromDir(cpt=33880)
 
 # CSV -------------------------------------
 #full.data.csv <- NSQIPFromCSV()
-#cpt.data.csv <- NSQIPFromCSV(cpt=420029)
+#cpt.data.csv <- NSQIPFromCSV(cpt=33880)
 
 # SQL -------------------------------------
-con <- dbConnect(RSQLite::SQLite(), "./data/nsqip.db")
-cpt.data.sql <- ByCPT(cpt=33880,con)
+con <- dbConnect(RSQLite::SQLite(),"./data/nsqip.db")
+#cpt.data.sql <- ByCPT(cpt=15610,con)
+cpt.codes <- c(15756,15757,15738)
+cpt.data.sql <- ByMultipleCPT(cpts=cpt.codes,con)
+# Excel exporting
+csv.file.name <- paste(cpt.codes, collapse='-' )
+write.csv(cpt.data.sql, file = sprintf("nsqip.codes.%s.csv",csv.file.name),row.names=FALSE, na="")
